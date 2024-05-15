@@ -1,10 +1,13 @@
 import pandas as pd
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 from backend.models.knn_model import KNNModel
 from backend.utils.data_processing import load_data, preprocess_data
 from backend.utils.recommendation import get_top_recommendations
 
 app = Flask(__name__)
+CORS(app)
 
 knn_model = KNNModel()
 
@@ -21,7 +24,7 @@ def get_popular_products():
     filtered_products_df = merged_df[["product_id", "product_name", "brand_name", "rating", "reviews", "price_usd", "primary_category"]]
     filtered_products = filtered_products_df.to_dict(orient="records")
 
-    return jsonify({"products": filtered_products}), 200
+    return jsonify(filtered_products), 200
 
 
 @app.route("/recommend",  methods=["GET"])
@@ -45,7 +48,7 @@ def recommend():
         ["product_id", "product_name", "brand_name", "rating", "reviews", "price_usd", "primary_category"]]
     filtered_products = filtered_products_df.to_dict("records")
 
-    return jsonify({"products": filtered_products}), 200
+    return jsonify(filtered_products), 200
 
 
 if __name__ == "__main__":

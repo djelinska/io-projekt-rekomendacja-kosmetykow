@@ -23,4 +23,4 @@ def preprocess_data(products_df, reviews_df, rating_count_threshold=2500):
 
     features_df = merged_with_threshold_df.pivot_table(index="product_id", columns="author_id", values="rating").fillna(0)
 
-    return features_df
+    return popular_products_df, features_df

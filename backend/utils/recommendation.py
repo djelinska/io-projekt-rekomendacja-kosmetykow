@@ -5,7 +5,7 @@ def get_top_recommendations(product_id, knn_model, k=3):
     products = load_data("./data/sephora_products_dataset.csv")
     reviews = load_data("./data/sephora_reviews_dataset.csv")
 
-    features_df = preprocess_data(products, reviews)
+    _, features_df = preprocess_data(products, reviews)
 
     knn_model.train(features_df)
 

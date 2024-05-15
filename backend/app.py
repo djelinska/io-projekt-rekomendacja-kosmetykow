@@ -35,11 +35,17 @@ def recommend():
     if recommendation_count is not None and 2 <= int(recommendation_count) <= 7:
         recommendation_count = int(recommendation_count)
     else:
-        recommendation_count = 3
+        recommendation_count = 7
 
-    recommendations = get_top_recommendations(product_id, knn_model, recommendation_count)
+    recommendations_ids = get_top_recommendations(product_id, knn_model, recommendation_count)
 
-    return jsonify(recommendations), 200
+    products_df = load_data("./data/sephora_products_dataset.csv")
+
+    filtered_products_df = products_df[products_df["product_id"].isin(recommendations_ids)][
+        ["product_id", "product_name", "brand_name", "rating", "reviews", "price_usd", "primary_category"]]
+    filtered_products = filtered_products_df.to_dict("records")
+
+    return jsonify({"products": filtered_products}), 200
 
 
 if __name__ == "__main__":
